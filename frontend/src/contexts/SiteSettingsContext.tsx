@@ -5,7 +5,7 @@
 // maintain allman bracket style for consistency
 
 // react
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 // utils
 import { authenticatedFetch, getURL } from '../utils';
@@ -22,54 +22,101 @@ interface SiteSettingsContextType {
 }
 
 const defaultSettings: SiteSettings = {
-    minimal_mode: false,
+    // Public fallback only. The stored admin preference is never changed here.
+    minimal_mode: true,
 };
+
+function validateSettings(value: unknown): SiteSettings {
+    if (!value || typeof value !== 'object' ||
+        typeof (value as SiteSettings).minimal_mode !== 'boolean') {
+        throw new Error('Invalid site settings response');
+    }
+    return { minimal_mode: (value as SiteSettings).minimal_mode };
+}
 
 const SiteSettingsContext = createContext<SiteSettingsContextType | undefined>(undefined);
 
 export function SiteSettingsProvider({ children }: { children: React.ReactNode }) {
     const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
     const [isLoading, setIsLoading] = useState(true);
+    const readController = useRef<AbortController | null>(null);
+    const requestVersion = useRef(0);
+    const updating = useRef(false);
 
-    const refreshSettings = async () => {
+    const refreshSettings = useCallback(async () => {
+        if (updating.current) return;
+        readController.current?.abort();
+        const controller = new AbortController();
+        readController.current = controller;
+        const version = ++requestVersion.current;
+        const timeout = window.setTimeout(() => controller.abort(), 8000);
         try {
             const response = await fetch(getURL('/site-settings'), {
-                credentials: 'include'
+                credentials: 'include',
+                cache: 'no-store',
+                signal: controller.signal,
             });
 
-            if (response.ok) {
-                setSettings(await response.json());
+            if (!response.ok) {
+                throw new Error('Site settings are unavailable');
             }
+            const nextSettings = validateSettings(await response.json());
+            if (version === requestVersion.current) setSettings(nextSettings);
         } catch (error) {
-            console.error('Failed to fetch site settings:', error);
+            if (version === requestVersion.current) {
+                setSettings(defaultSettings);
+                console.error('Failed to fetch site settings; using minimal mode:', error);
+            }
         } finally {
-            setIsLoading(false);
+            window.clearTimeout(timeout);
+            if (version === requestVersion.current) setIsLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         refreshSettings();
-
+        const handleOffline = () => {
+            ++requestVersion.current;
+            readController.current?.abort();
+            setSettings(defaultSettings);
+            setIsLoading(false);
+        };
+        window.addEventListener('offline', handleOffline);
+        window.addEventListener('online', refreshSettings);
         const interval = window.setInterval(refreshSettings, 30000);
-        return () => window.clearInterval(interval);
-    }, []);
+        return () => {
+            ++requestVersion.current;
+            readController.current?.abort();
+            window.clearInterval(interval);
+            window.removeEventListener('offline', handleOffline);
+            window.removeEventListener('online', refreshSettings);
+        };
+    }, [refreshSettings]);
 
     const updateMinimalMode = async (minimalMode: boolean) => {
-        const response = await authenticatedFetch(getURL('/site-settings'), {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                minimal_mode: minimalMode,
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to update site settings');
+        updating.current = true;
+        readController.current?.abort();
+        const version = ++requestVersion.current;
+        try {
+            const response = await authenticatedFetch(getURL('/site-settings'), {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    minimal_mode: minimalMode,
+                }),
+            });
+            if (!response.ok) throw new Error('Failed to update site settings');
+            const nextSettings = validateSettings(await response.json());
+            if (version === requestVersion.current) setSettings(nextSettings);
+        } catch (error) {
+            if (version === requestVersion.current) setSettings(defaultSettings);
+            throw error;
+        } finally {
+            updating.current = false;
+            if (version === requestVersion.current) setIsLoading(false);
         }
-
-        setSettings(await response.json());
     };
 
     return (
