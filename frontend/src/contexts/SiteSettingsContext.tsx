@@ -2,8 +2,6 @@
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
-// maintain allman bracket style for consistency
-
 // react
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
@@ -21,14 +19,17 @@ interface SiteSettingsContextType {
     updateMinimalMode: (minimalMode: boolean) => Promise<void>;
 }
 
-const defaultSettings: SiteSettings = {
-    // Public fallback only. The stored admin preference is never changed here.
+// This fallback does not change the saved admin setting.
+const redactedSettings: SiteSettings = {
     minimal_mode: true,
 };
 
 function validateSettings(value: unknown): SiteSettings {
-    if (!value || typeof value !== 'object' ||
-        typeof (value as SiteSettings).minimal_mode !== 'boolean') {
+    if (
+        !value ||
+        typeof value !== 'object' ||
+        typeof (value as SiteSettings).minimal_mode !== 'boolean'
+    ) {
         throw new Error('Invalid site settings response');
     }
     return { minimal_mode: (value as SiteSettings).minimal_mode };
@@ -37,9 +38,10 @@ function validateSettings(value: unknown): SiteSettings {
 const SiteSettingsContext = createContext<SiteSettingsContextType | undefined>(undefined);
 
 export function SiteSettingsProvider({ children }: { children: React.ReactNode }) {
-    const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
+    const [settings, setSettings] = useState<SiteSettings>(redactedSettings);
     const [isLoading, setIsLoading] = useState(true);
     const readController = useRef<AbortController | null>(null);
+    // Ignore responses from reads superseded by a newer read or admin update.
     const requestVersion = useRef(0);
     const updating = useRef(false);
 
@@ -64,8 +66,8 @@ export function SiteSettingsProvider({ children }: { children: React.ReactNode }
             if (version === requestVersion.current) setSettings(nextSettings);
         } catch (error) {
             if (version === requestVersion.current) {
-                setSettings(defaultSettings);
-                console.error('Failed to fetch site settings; using minimal mode:', error);
+                setSettings(redactedSettings);
+                console.error('Site settings unavailable; using redacted view:', error);
             }
         } finally {
             window.clearTimeout(timeout);
@@ -78,7 +80,7 @@ export function SiteSettingsProvider({ children }: { children: React.ReactNode }
         const handleOffline = () => {
             ++requestVersion.current;
             readController.current?.abort();
-            setSettings(defaultSettings);
+            setSettings(redactedSettings);
             setIsLoading(false);
         };
         window.addEventListener('offline', handleOffline);
@@ -111,7 +113,7 @@ export function SiteSettingsProvider({ children }: { children: React.ReactNode }
             const nextSettings = validateSettings(await response.json());
             if (version === requestVersion.current) setSettings(nextSettings);
         } catch (error) {
-            if (version === requestVersion.current) setSettings(defaultSettings);
+            if (version === requestVersion.current) setSettings(redactedSettings);
             throw error;
         } finally {
             updating.current = false;
