@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -10,11 +10,12 @@ import { Box, Button, Image, Flex, Stack, Text } from "@chakra-ui/react";
 // icons and images
 import { IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconMail, IconBrandDiscord} from '@tabler/icons-react';
 
-import { isBikatr7URL } from '../../utils';
+import { useTheme } from '../../contexts/ThemeContext';
 
 import face from '../../assets/images/personals/kadenbilyeu.webp';
 
 function Contact() {
+    const { isRetro } = useTheme();
     return (
         <Box p={4} textAlign="center">
             <Flex direction={{ base: 'column', md: 'row' }} alignItems="center" justifyContent="center" mb={4}>
@@ -28,7 +29,7 @@ function Contact() {
                 />
                 <Box textAlign="left">
                     <Text fontSize="lg" fontWeight="bold">
-                        {isBikatr7URL() ? "Kaden Bilyeu (Bikatr7)" : "Kaden Bilyeu"}
+                        {isRetro ? "Kaden Bilyeu (ktbilyeu)" : "Kaden Bilyeu"}
                     </Text>
                     <Text fontSize="md" color="gray.500" mb={4}>
                         kadenbilyeu@proton.me
@@ -41,7 +42,7 @@ function Contact() {
                             <Button as="a" href="https://linkedin.com/in/kadenbilyeu" leftIcon={<IconBrandLinkedin />} rounded="full" _hover={{ color: 'yellow', transform: 'scale(1.01)'}} _active={{ transform: 'scale(0.99)'}} variant="outline">
                                 LinkedIn
                             </Button>
-                            <Button as="a" href="https://github.com/Bikatr7" leftIcon={<IconBrandGithub />} rounded="full" _hover={{ color: 'yellow', transform: 'scale(1.01)'}} _active={{ transform: 'scale(0.99)'}} variant="outline">
+                            <Button as="a" href="https://github.com/ktbilyeu" leftIcon={<IconBrandGithub />} rounded="full" _hover={{ color: 'yellow', transform: 'scale(1.01)'}} _active={{ transform: 'scale(0.99)'}} variant="outline">
                                 GitHub
                             </Button>
                         </Stack>
@@ -49,7 +50,7 @@ function Contact() {
                             <Button as="a" href="https://discord.com/users/1141562307885936763" leftIcon={<IconBrandDiscord />} rounded="full" _hover={{ color: 'yellow', transform: 'scale(1.01)'}} _active={{ transform: 'scale(0.99)'}} variant="outline">
                                 Discord
                             </Button>
-                            <Button as="a" href="https://twitter.com/bikatr7" leftIcon={<IconBrandTwitter />} rounded="full"_hover={{ color: 'yellow', transform: 'scale(1.01)'}} _active={{ transform: 'scale(0.99)'}} variant="outline">
+                            <Button as="a" href="https://x.com/ktbilyeu" leftIcon={<IconBrandTwitter />} rounded="full"_hover={{ color: 'yellow', transform: 'scale(1.01)'}} _active={{ transform: 'scale(0.99)'}} variant="outline">
                                 Twitter
                             </Button>
                         </Stack>

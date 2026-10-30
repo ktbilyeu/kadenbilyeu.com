@@ -14,7 +14,7 @@
     "start": "vite preview",
     "compile": "tsc --noEmit",
     "generate:sitemap": "node ./scripts/generate-sitemap.mjs",
-    "test:security": "node ./scripts/check-admin-security.mjs"
+    "test:security": "node ./scripts/check-admin-security.mjs && node --test ./scripts/check-sitemap.mjs"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",

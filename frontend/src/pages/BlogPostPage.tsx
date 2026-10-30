@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -173,8 +173,8 @@ const BlogPostPage: React.FC = () => {
                     title={`${blogPost.title} | Kaden Bilyeu's Blog`}
                     description={blogPost.content.replace(/[#*`\[\]]/g, '').substring(0, 160).trim() + (blogPost.content.length > 160 ? '...' : '')}
                     url={`${window.location.origin}/blog/${createSlug(blogPost.title)}`}
-                    image={`${window.location.origin}/kb.webp`}
-                    imageAlt="Kaden Bilyeu (Bikatr7) Profile Picture"
+                    image="https://kadenbilyeu.com/kb.webp"
+                    imageAlt="Kaden Bilyeu (ktbilyeu) Profile Picture"
                     type="article"
                     author={blogPost.author}
                     publishedTime={blogPost.created_at}

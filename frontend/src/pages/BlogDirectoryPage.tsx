@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -148,7 +148,7 @@ const BlogDirectoryPage: React.FC = () => {
             className={isRetro ? 'retro-mode' : ''}
         >
             <EmbedSEO
-                title={isRetro ? "Bikatr7's Blog Directory" : "Kaden Bilyeu's Blog Directory"}
+                title={isRetro ? "ktbilyeu's Blog Directory" : "Kaden Bilyeu's Blog Directory"}
                 description="View all blog posts in one place."
             />
 
@@ -244,7 +244,7 @@ const BlogDirectoryPage: React.FC = () => {
                                             whiteSpace="nowrap"
                                             fontFamily={isRetro ? "'Press Start 2P', monospace" : "inherit"}
                                         >
-                                            {formatDate(post.created_at)} by {isRetro ? "Bikatr7" : post.author}
+                                            {formatDate(post.created_at)} by {isRetro ? "ktbilyeu" : post.author}
                                         </Text>
                                     </Flex>
                                 </Link>

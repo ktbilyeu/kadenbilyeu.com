@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -39,7 +39,7 @@ function PortfolioProjects() {
                 '@type': 'SoftwareApplication',
                 name: 'Kai Language',
                 description: 'Minimal, statically typed expression language implemented in Haskell',
-                url: 'https://github.com/Bikatr7/kai',
+                url: 'https://github.com/ktbilyeu/kai',
                 applicationCategory: 'Programming Language',
                 operatingSystem: 'Cross-platform',
                 programmingLanguage: ['Haskell'],
@@ -64,7 +64,7 @@ function PortfolioProjects() {
                 '@type': 'SoftwareApplication',
                 name: 'Kudasai',
                 description: 'Japanese translation application using multiple APIs',
-                url: 'https://github.com/Bikatr7/kudasai',
+                url: 'https://github.com/ktbilyeu/kudasai',
                 applicationCategory: 'Translation Software',
                 operatingSystem: 'Cross-platform',
                 programmingLanguage: ['Python'],
@@ -99,7 +99,7 @@ function PortfolioProjects() {
                 '@type': 'SoftwareApplication',
                 name: 'EasyTL',
                 description: 'Translation API wrapper library',
-                url: 'https://github.com/Bikatr7/EasyTL',
+                url: 'https://github.com/ktbilyeu/EasyTL',
                 applicationCategory: 'Software Library',
                 programmingLanguage: ['Python'],
                 author: {
@@ -123,7 +123,7 @@ function PortfolioProjects() {
                 '@type': 'SoftwareApplication',
                 name: 'Kairyou',
                 description: 'Japanese text preprocessor for translation and NLP tasks',
-                url: 'https://github.com/bikatr7/kairyou',
+                url: 'https://github.com/ktbilyeu/kairyou',
                 applicationCategory: 'Software Library',
                 programmingLanguage: ['Python'],
                 author: {
@@ -135,7 +135,7 @@ function PortfolioProjects() {
                 '@type': 'SoftwareApplication',
                 name: 'Seisen',
                 description: 'Japanese language learning application with spaced repetition',
-                url: 'https://github.com/Bikatr7/seisen',
+                url: 'https://github.com/ktbilyeu/seisen',
                 applicationCategory: 'Educational Software',
                 programmingLanguage: ['Python'],
                 author: {
@@ -207,8 +207,8 @@ function PortfolioProjects() {
                     ]}
                     imageUrl={kai_logo}
                     imageAlt="Kai Language Logo"
-                    websiteUrl="https://bikatr7.github.io/Kai/"
-                    githubUrl="https://github.com/Bikatr7/kai"
+                    websiteUrl="https://ktbilyeu.github.io/Kai/"
+                    githubUrl="https://github.com/ktbilyeu/kai"
                     tags={["Open Source", "Haskell", "Programming Language", "Type System", "Parser", "Compiler", "Functional Programming", "Static Typing"]}
                 />
                 <Item
@@ -302,7 +302,7 @@ function PortfolioProjects() {
                     imageUrl={kb_logo}
                     imageAlt="Homelab Management Portal Logo"
                     websiteUrl="https://kadenbilyeu.com"
-                    githubUrl="https://github.com/Bikatr7/kadenbilyeu.com"
+                    githubUrl="https://github.com/ktbilyeu/kadenbilyeu.com"
                     tags={["Future Project", "Homelab", "Infrastructure", "Monitoring", "Self-Hosting", "Open Source", "React", "FastAPI", "Docker"]}
                 />
                 <Item
@@ -347,8 +347,8 @@ function PortfolioProjects() {
                     ]}
                     imageUrl={kudasai_logo}
                     imageAlt="Kudasai Logo"
-                    websiteUrl="https://huggingface.co/spaces/Bikatr7/Kudasai"
-                    githubUrl="https://github.com/Bikatr7/kudasai"
+                    websiteUrl="https://huggingface.co/spaces/ktbilyeu/Kudasai"
+                    githubUrl="https://github.com/ktbilyeu/kudasai"
                     tags={["Open Source", "Python", "Hugging Face", "sPacy", "Google Translate", "DeepL", "OpenAI", "Gemini", "Gradio"]}
                 />
                 <Item
@@ -394,7 +394,7 @@ function PortfolioProjects() {
                     imageUrl={kb_logo}
                     imageAlt="Kaden Bilyeu Logo"
                     websiteUrl="https://kadenbilyeu.com"
-                    githubUrl="https://github.com/Bikatr7/kadenbilyeu.com"
+                    githubUrl="https://github.com/ktbilyeu/kadenbilyeu.com"
                     tags={["Open Source", "React", "TypeScript", "Vite", "Python", "FastAPI", "Docker", "sqlite"]}
                 />
                 <Item
@@ -477,7 +477,7 @@ function PortfolioProjects() {
                     imageUrl={easytl_logo}
                     imageAlt="EasyTL Logo"
                     websiteUrl="https://easytl.org"
-                    githubUrl="https://github.com/Bikatr7/EasyTL"
+                    githubUrl="https://github.com/ktbilyeu/EasyTL"
                     tags={["Open Source", "Python", "Package", "OpenAI", "DeepL", "Google Translate", "Gemini", "Azure", "Anthropic", "React", "TypeScript", "Vite", "FastAPI"]}
                 />
                 <Item
@@ -548,7 +548,7 @@ function PortfolioProjects() {
                     imageUrl={kairyou_logo}
                     imageAlt="Kairyou Logo"
                     websiteUrl="https://kakusui.org/kairyou"
-                    githubUrl="https://github.com/bikatr7/kairyou"
+                    githubUrl="https://github.com/ktbilyeu/kairyou"
                     tags={["Open Source", "Python", "NLP", "sPacy", "NER"]}
                 />
                 <Item
@@ -582,7 +582,7 @@ function PortfolioProjects() {
                     ]}
                     imageUrl={seisen_logo}
                     imageAlt="Seisen Logo"
-                    githubUrl="https://github.com/Bikatr7/seisen"
+                    githubUrl="https://github.com/ktbilyeu/seisen"
                     tags={["Open Source", "Python", "MySQL", "mysql-connector-python"]}
                 />
                 <Item

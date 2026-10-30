@@ -1,4 +1,4 @@
-## Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+## Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 ## Use of this source code is governed by an GNU Affero General Public License v3.0
 ## license that can be found in the LICENSE file.
 
@@ -15,6 +15,7 @@ from slowapi.middleware import SlowAPIMiddleware
 
 from config import limiter, SECURE_COOKIES
 from database import get_db
+from origins import configured_origins, cors_preview_origin_regex
 from maintenance import (
     MaintenanceBusyError,
     database_activity_window,
@@ -112,20 +113,14 @@ async def security_headers_middleware(request:Request, call_next):
     return response
 
 ## CORS setup
-origins = [
-    "https://bikatr7.com",
+origins = configured_origins("CORS_ALLOWED_ORIGINS", {
     "https://kadenbilyeu.com",
     "http://localhost:5173",
-    "https://kadenbilyeu-com.pages.dev",
-    "https://*.kadenbilyeu-com.pages.dev",
-    "https://*.bikatr7.com",
-    "https://bikatr7.pages.dev",
-    "https://*.bikatr7.pages.dev"
-]
+})
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_origin_regex=r"^https://([a-z0-9-]\.)?(kadenbilyeu-com\.pages\.dev|bikatr7\.pages\.dev)$",
+    allow_origin_regex=cors_preview_origin_regex(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["Authorization", "Content-Type", "X-Requested-With"],

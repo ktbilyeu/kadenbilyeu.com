@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -13,9 +13,10 @@ import NamedDivider from "../../components/NamedDivider";
 // images
 import face from "../../assets/images/personals/kadenbilyeu.webp";
 
-import { isBikatr7URL } from "../../utils";
+import { useTheme } from "../../contexts/ThemeContext";
 
 function PortfolioIntroduction() {
+    const { isRetro } = useTheme();
     return (
         <Box padding="5">
             <Stack direction={{ base: 'column', md: 'row' }} bg="black" id="home" paddingTop={5} >
@@ -26,7 +27,7 @@ function PortfolioIntroduction() {
                     <Stack spacing={6} w="full" maxW="xl">
                         <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
                             <Text as="span" position="relative">
-                                {isBikatr7URL() ? "Kaden Bilyeu (Bikatr7)" : "Kaden Bilyeu"}
+                                {isRetro ? "Kaden Bilyeu (ktbilyeu)" : "Kaden Bilyeu"}
                             </Text>
                             <br />
                         </Heading>

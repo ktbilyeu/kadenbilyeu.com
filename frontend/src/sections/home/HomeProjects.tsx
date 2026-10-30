@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -30,8 +30,8 @@ function Projects() {
             subtitle: "A minimal, statically typed expression language implemented in Haskell",
             imageUrl: kai_logo,
             imageAlt: "Kai Language Logo",
-            linkUrl: "https://bikatr7.github.io/Kai/",
-            githubUrl: "https://github.com/Bikatr7/kai",
+            linkUrl: "https://ktbilyeu.github.io/Kai/",
+            githubUrl: "https://github.com/ktbilyeu/kai",
             tags: ["Open Source", "Haskell", "Programming Language", "Type System", "Parser", "Compiler", "Functional Programming"]
         },
         {
@@ -50,7 +50,7 @@ function Projects() {
             imageUrl: kb_logo,
             imageAlt: "Homelab Management Portal Logo",
             linkUrl: "https://kadenbilyeu.com",
-            githubUrl: "https://github.com/Bikatr7/kadenbilyeu.com",
+            githubUrl: "https://github.com/ktbilyeu/kadenbilyeu.com",
             tags: ["Future Project", "Homelab", "Infrastructure", "Monitoring", "Self-Hosting", "Open Source", "React", "FastAPI", "Docker"]
         },
         {
@@ -58,8 +58,8 @@ function Projects() {
             subtitle: "Streamlining Japanese-English Translation with Advanced Preprocessing",
             imageUrl: kudasai_logo,
             imageAlt: "Kudasai Logo",
-            linkUrl: "https://huggingface.co/spaces/Bikatr7/Kudasai",
-            githubUrl: "https://github.com/Bikatr7/kudasai",
+            linkUrl: "https://huggingface.co/spaces/ktbilyeu/Kudasai",
+            githubUrl: "https://github.com/ktbilyeu/kudasai",
             tags: ["Open Source", "Python", "Hugging Face", "sPacy", "Google Translate", "DeepL", "OpenAI", "Gemini", "Gradio"]
         },
         {
@@ -68,7 +68,7 @@ function Projects() {
             imageUrl: kb_logo,
             imageAlt: "Kaden Bilyeu Logo",
             linkUrl: "https://kadenbilyeu.com",
-            githubUrl: "https://github.com/Bikatr7/kadenbilyeu.com",
+            githubUrl: "https://github.com/ktbilyeu/kadenbilyeu.com",
             tags: ["Open Source", "React", "TypeScript", "Vite", "Python", "FastAPI", "Docker", "Self-Hosted", "Automated Backups"]
         },
         {
@@ -86,7 +86,7 @@ function Projects() {
             imageUrl: easytl_logo,
             imageAlt: "EasyTL Logo",
             linkUrl: "https://easytl.org",
-            githubUrl: "https://github.com/Bikatr7/EasyTL",
+            githubUrl: "https://github.com/ktbilyeu/EasyTL",
             documentationUrl: "https://easytl.readthedocs.io/en/latest/index.html",
             tags: ["Open Source", "Python", "Package", "OpenAI", "DeepL", "Google Translate", "Gemini", "Azure", "Anthropic", "React", "TypeScript", "Vite", "FastAPI"]
         },
@@ -104,7 +104,7 @@ function Projects() {
             imageUrl: kairyou_logo,
             imageAlt: "Kairyou Logo",
             linkUrl: "https://kakusui.org/kairyou",
-            githubUrl: "https://github.com/bikatr7/kairyou",
+            githubUrl: "https://github.com/ktbilyeu/kairyou",
             tags: ["Open Source", "Python", "NLP", "sPacy", "NER"]
         },
         {
@@ -112,7 +112,7 @@ function Projects() {
             subtitle: "Train yourself on Japanese kana, kanji, and vocabulary!",
             imageUrl: seisen_logo,
             imageAlt: "Seisen Logo",
-            githubUrl: "https://github.com/Bikatr7/seisen",
+            githubUrl: "https://github.com/ktbilyeu/seisen",
             tags: ["Open Source", "Python", "MySQL", "mysql-connector-python"]
         },
         {

@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { isBikatr7URL } from '../utils';
 
 interface ThemeContextType {
     isRetro: boolean;
@@ -10,9 +9,9 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children, forceStandardMode = false }: { children: React.ReactNode, forceStandardMode?: boolean }) {
     const [storedRetro, setStoredRetro] = useState<boolean>(() => {
-        // Initialize from localStorage or URL
+        // Preserve the user's theme preference on every hostname.
         const savedRetro = localStorage.getItem('isRetro');
-        return savedRetro ? JSON.parse(savedRetro) : isBikatr7URL();
+        return savedRetro ? JSON.parse(savedRetro) : false;
     });
     const isRetro = forceStandardMode ? false : storedRetro;
 

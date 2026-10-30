@@ -1,4 +1,4 @@
-# Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+# Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 # Use of this source code is governed by an GNU Affero General Public License v3.0
 # license that can be found in the LICENSE file.
 
@@ -29,6 +29,7 @@ from webauthn.helpers.structs import (
 )
 
 from config import ENVIRONMENT
+from origins import configured_origins
 from database import (
     func_get_webauthn_credentials,
     func_get_webauthn_credential_by_id,
@@ -55,7 +56,7 @@ def get_expected_origins():
     if ENVIRONMENT == "development":
         return ["http://localhost:5173"]
     else:
-        return ["https://kadenbilyeu.com", "https://bikatr7.com"]
+        return configured_origins("WEBAUTHN_ALLOWED_ORIGINS", {"https://kadenbilyeu.com"})
 
 def get_expected_origin():
     """Get the expected origin based on environment (legacy function)."""

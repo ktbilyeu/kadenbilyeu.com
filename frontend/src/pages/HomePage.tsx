@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -24,11 +24,9 @@ import AboutSite from '../sections/home/AboutSite';
 import Contact from '../sections/home/Contact';
 
 import { useTheme } from '../contexts/ThemeContext';
-import { isBikatr7URL } from '../utils';
 
 function HomePage({ showContent, toggleContent, contentLoaded }: { showContent: boolean, toggleContent: any, contentLoaded: boolean }) {
     const { isRetro } = useTheme();
-    const isBikatr7 = isBikatr7URL();
 
     useEffect(() => {
         if (!showContent) {
@@ -48,9 +46,9 @@ function HomePage({ showContent, toggleContent, contentLoaded }: { showContent: 
         >
             <EmbedSEO
                 title="Kaden Bilyeu | Portfolio & Blog"
-                description="Explore projects, blog posts, and contact information for software engineer Kaden Bilyeu (Bikatr7)."
-                image={`${window.location.origin}/kb.webp`}
-                imageAlt="Kaden Bilyeu (Bikatr7) Profile Picture"
+                description="Explore projects, blog posts, and contact information for software engineer Kaden Bilyeu (ktbilyeu)."
+                image="https://kadenbilyeu.com/kb.webp"
+                imageAlt="Kaden Bilyeu (ktbilyeu) Profile Picture"
                 url={window.location.href}
             />
             <Preface
@@ -92,7 +90,7 @@ function HomePage({ showContent, toggleContent, contentLoaded }: { showContent: 
                     )}
                 </>
             )}
-            {!isBikatr7 && <StorageNoticeModal />}
+            <StorageNoticeModal />
         </Box>
     );
 }

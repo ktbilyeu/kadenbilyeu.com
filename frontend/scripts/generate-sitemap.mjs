@@ -1,95 +1,74 @@
 import fs from 'fs';
 import path from 'path';
+import { pathToFileURL } from 'url';
 import fetch from 'node-fetch';
 
 const API_ENDPOINT = process.env.SITEMAP_API || 'https://api.kadenbilyeu.com/all-blogs';
-const OUTPUT_PATH = path.join(process.cwd(), 'public', 'sitemap.xml');
+const SETTINGS_ENDPOINT = process.env.SITEMAP_SETTINGS_API || 'https://api.kadenbilyeu.com/site-settings';
+const SITE_URL = 'https://kadenbilyeu.com';
 
-const createSlug = (title) => {
-  return title
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/--+/g, '-')
-    .trim()
-    .replace(/^-+|-+$/g, '');
-};
+const createSlug = (title) => title.toLowerCase()
+  .replace(/[^\w\s-]/g, '')
+  .replace(/\s+/g, '-')
+  .replace(/--+/g, '-')
+  .trim()
+  .replace(/^-+|-+$/g, '');
 
-(async () => {
+export async function getSitemapUrls(fetchImpl = fetch) {
+  const today = new Date().toISOString().split('T')[0];
+  const urls = [{ loc: `${SITE_URL}/`, lastmod: today, changefreq: 'weekly', priority: '1.0' }];
+
+  // Match the frontend's redacted fallback. Never reuse a previous sitemap:
+  // its blog URLs may have been deliberately hidden since the previous build.
   try {
-    let posts = [];
-
-    // Try to fetch blog posts, but don't fail if API is unavailable
-    try {
-      const res = await fetch(API_ENDPOINT);
-      if (res.ok) {
-        const contentType = res.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          posts = await res.json();
-        } else {
-          console.warn('API returned non-JSON response, skipping blog posts in sitemap');
-        }
-      } else {
-        console.warn(`API returned status ${res.status}, skipping blog posts in sitemap`);
-      }
-    } catch (apiError) {
-      console.warn('Failed to fetch blog posts from API, generating sitemap with static pages only:', apiError.message);
-    }
-
-    const staticUrls = [
-      { url: '/', priority: '1.0', changefreq: 'weekly' },
-      { url: '/portfolio', priority: '0.9', changefreq: 'monthly' },
-      { url: '/blog', priority: '0.8', changefreq: 'daily' },
-      { url: '/blog/directory', priority: '0.7', changefreq: 'daily' },
-    ];
-
-    const domains = ['https://kadenbilyeu.com', 'https://bikatr7.com'];
-
-    const urls = [
-      ...staticUrls.flatMap((page) =>
-        domains.map((d) => ({
-          loc: `${d}${page.url}`,
-          lastmod: new Date().toISOString().split('T')[0],
-          changefreq: page.changefreq,
-          priority: page.priority,
-          alternate: domains.filter(alt => alt !== d).map(alt => `${alt}${page.url}`)
-        }))
-      ),
-      ...posts.flatMap((post) =>
-        domains.map((d) => ({
-          loc: `${d}/blog/${createSlug(post.title)}`,
-          lastmod: post.updated_at ? new Date(post.updated_at).toISOString().split('T')[0] :
-                   new Date(post.created_at).toISOString().split('T')[0],
-          changefreq: 'monthly',
-          priority: '0.6',
-          alternate: domains.filter(alt => alt !== d).map(alt => `${alt}/blog/${createSlug(post.title)}`)
-        }))
-      ),
-    ];
-
-    const xmlEntries = urls.map((urlObj) => {
-      const alternateLinks = urlObj.alternate.map(alt => 
-        `    <xhtml:link rel="alternate" hreflang="x-default" href="${alt}"/>`
-      ).join('\n');
-      
-      return `  <url>
-    <loc>${urlObj.loc}</loc>
-    <lastmod>${urlObj.lastmod}</lastmod>
-    <changefreq>${urlObj.changefreq}</changefreq>
-    <priority>${urlObj.priority}</priority>
-${alternateLinks}
-  </url>`;
-    }).join('\n');
-
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${xmlEntries}
-</urlset>`;
-
-    fs.writeFileSync(OUTPUT_PATH, xml);
-    console.log(`Enhanced sitemap generated with ${urls.length} URLs`);
-  } catch (err) {
-    console.error('Failed to generate sitemap', err);
-    process.exit(1);
+    const response = await fetchImpl(SETTINGS_ENDPOINT, { signal: AbortSignal.timeout(10000) });
+    if (!response.ok || (await response.json())?.minimal_mode !== false) return urls;
+  } catch {
+    console.warn('Site settings unavailable; generating a redacted sitemap');
+    return urls;
   }
-})(); 
+
+  urls.push(
+    { loc: `${SITE_URL}/portfolio`, lastmod: today, changefreq: 'monthly', priority: '0.9' },
+    { loc: `${SITE_URL}/blog`, lastmod: today, changefreq: 'daily', priority: '0.8' },
+    { loc: `${SITE_URL}/blog/directory`, lastmod: today, changefreq: 'daily', priority: '0.7' },
+  );
+
+  try {
+    const response = await fetchImpl(API_ENDPOINT, { signal: AbortSignal.timeout(10000) });
+    if (!response.ok) return urls;
+    const posts = await response.json();
+    if (!Array.isArray(posts)) return urls;
+    for (const post of posts) {
+      if (typeof post?.title !== 'string') continue;
+      const slug = createSlug(post.title);
+      if (!slug) continue;
+      const modified = new Date(post.updated_at || post.created_at);
+      urls.push({
+        loc: `${SITE_URL}/blog/${slug}`,
+        lastmod: Number.isNaN(modified.getTime()) ? today : modified.toISOString().split('T')[0],
+        changefreq: 'monthly',
+        priority: '0.6',
+      });
+    }
+  } catch {
+    console.warn('Blog list unavailable; omitting individual posts from sitemap');
+  }
+  return urls;
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const urls = await getSitemapUrls();
+  const entries = urls.map(({ loc, lastmod, changefreq, priority }) => `  <url>
+    <loc>${loc}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`).join('\n');
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${entries}
+</urlset>\n`;
+  fs.writeFileSync(path.join(process.cwd(), 'public', 'sitemap.xml'), xml);
+  console.log(`Sitemap generated with ${urls.length} URLs`);
+}

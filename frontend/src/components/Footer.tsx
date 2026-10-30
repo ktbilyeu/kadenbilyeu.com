@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -42,7 +42,7 @@ function Footer()
                     <Flex gap={2}>
                         <IconButton
                             as='a'
-                            href='https://github.com/Bikatr7'
+                            href='https://github.com/ktbilyeu'
                             aria-label='Github'
                             icon={<IconBrandGithub />}
                             bg="transparent"
@@ -58,7 +58,7 @@ function Footer()
                         />
                         <IconButton
                             as='a'
-                            href={isRetro ? 'https://status.bikatr7.com' : 'https://status.kadenbilyeu.com'}
+                            href="https://status.kadenbilyeu.com"
                             aria-label='Status'
                             icon={<IconActivity />}
                             bg="transparent"
@@ -78,24 +78,24 @@ function Footer()
                         fontFamily={isRetro ? "'Press Start 2P', monospace" : "inherit"}
                         fontSize={isRetro ? { base: "10px", md: "xs" } : "inherit"}
                     >
-                        © 2024-{currentYear} {isRetro ? 'Bikatr7' : 'Kaden Bilyeu (Bikatr7)'}. All rights reserved
+                        © 2024-{currentYear} {isRetro ? 'ktbilyeu' : 'Kaden Bilyeu (ktbilyeu)'}. All rights reserved
                     </Text>
-                    <Image src={logo} boxSize='30px' alt="Kaden Bilyeu (Bikatr7) Logo" />
+                    <Image src={logo} boxSize='30px' alt="Kaden Bilyeu (ktbilyeu) Logo" />
                 </Flex>
                 <Flex display={{ base: 'none', md: 'flex' }} width="100%" justify="space-between" align="center">
-                    <Image src={logo} boxSize='30px' alt="Kaden Bilyeu (Bikatr7) Logo" />
+                    <Image src={logo} boxSize='30px' alt="Kaden Bilyeu (ktbilyeu) Logo" />
                     <Text
                         textAlign="center"
                         flex="1"
                         fontFamily={isRetro ? "'Press Start 2P', monospace" : "inherit"}
                         fontSize={isRetro ? "xs" : "inherit"}
                     >
-                        © 2024-{currentYear} {isRetro ? 'Bikatr7' : 'Kaden Bilyeu (Bikatr7)'}. All rights reserved
+                        © 2024-{currentYear} {isRetro ? 'ktbilyeu' : 'Kaden Bilyeu (ktbilyeu)'}. All rights reserved
                     </Text>
                     <Flex gap={2}>
                         <IconButton
                             as='a'
-                            href='https://github.com/Bikatr7'
+                            href='https://github.com/ktbilyeu'
                             aria-label='Github'
                             icon={<IconBrandGithub />}
                             bg="transparent"
@@ -111,7 +111,7 @@ function Footer()
                         />
                         <IconButton
                             as='a'
-                            href={isRetro ? 'https://status.bikatr7.com' : 'https://status.kadenbilyeu.com'}
+                            href="https://status.kadenbilyeu.com"
                             aria-label='Status'
                             icon={<IconActivity />}
                             bg="transparent"

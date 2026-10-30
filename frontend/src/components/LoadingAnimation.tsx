@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -13,14 +13,14 @@ import { Box, Text } from '@chakra-ui/react';
 // animations
 import { textFadeIn, backgroundTransition } from '../animations/background';
 
-// utils
-import { isBikatr7URL } from '../utils';
+import { useTheme } from '../contexts/ThemeContext';
 
 
 const LoadingAnimation: React.FC<{ onLoadingComplete: () => void }> = ({ onLoadingComplete }) => 
 {
 
   const [showAnimation, setShowAnimation] = useState(false);
+  const { isRetro } = useTheme();
 
   useEffect(() => 
   {
@@ -68,7 +68,7 @@ const LoadingAnimation: React.FC<{ onLoadingComplete: () => void }> = ({ onLoadi
         fontSize="4xl"
         animation={`${textFadeIn} 2s linear forwards`}
       >
-        {isBikatr7URL() ? "Bikatr7" : "Kaden Bilyeu"}
+        {isRetro ? "ktbilyeu" : "Kaden Bilyeu"}
       </Text>
     </Box>
   );

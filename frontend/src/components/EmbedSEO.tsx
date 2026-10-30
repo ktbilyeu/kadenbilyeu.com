@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -39,12 +39,10 @@ const EmbedSEO = ({
   imageHeight = 630,
 }: EmbedSEOProps) => {
 
-  // Determine site context & alternate domain FIRST
-  const host = typeof window !== 'undefined' ? window.location.hostname : '';
-  const isBikatr7 = host.includes('bikatr7');
-  const siteName = isBikatr7 ? 'Bikatr7' : 'Kaden Bilyeu';
-  const otherDomain = isBikatr7 ? 'kadenbilyeu.com' : 'bikatr7.com';
-  const otherUrl = url ? url.replace(host, otherDomain) : undefined;
+  const siteName = 'Kaden Bilyeu';
+  const siteUrl = 'https://kadenbilyeu.com';
+  // Legacy domains remain reachable, but index the public portfolio at one URL.
+  const canonicalUrl = url ? `${siteUrl}${new URL(url, siteUrl).pathname}` : undefined;
 
   // Build JSON-LD after variables exist
   const jsonLd = {
@@ -53,7 +51,7 @@ const EmbedSEO = ({
     name: title,
     headline: title,
     description,
-    url,
+    url: canonicalUrl,
     ...(image ? {
       image: {
         '@type': 'ImageObject',
@@ -70,9 +68,7 @@ const EmbedSEO = ({
             author: {
               '@type': 'Person',
               name: author,
-              url: isBikatr7
-                ? 'https://github.com/Bikatr7'
-                : 'https://kadenbilyeu.com',
+              url: siteUrl,
             },
           }
           : {}),
@@ -82,7 +78,7 @@ const EmbedSEO = ({
         publisher: {
           '@type': 'Person',
           name: siteName,
-          url: isBikatr7 ? 'https://bikatr7.com' : 'https://kadenbilyeu.com',
+          url: siteUrl,
         },
       }
       : {}),
@@ -98,14 +94,14 @@ const EmbedSEO = ({
       {tags && <meta name="keywords" content={tags.join(', ')} />}
 
       {/* Canonical */}
-      {url && <link rel="canonical" href={url} />}
+      {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 
       {/* Open Graph Meta Tags */}
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content={type} />
       <meta property="og:locale" content={locale} />
-      {url && <meta property="og:url" content={url} />}
+      {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
       {image && (
         <>
           <meta property="og:image" content={image} />
@@ -124,15 +120,12 @@ const EmbedSEO = ({
         </>
       )}
 
-      {/* Alternate domain link for dual-site canonicalization */}
-      {otherUrl && <link rel="alternate" href={otherUrl} />}
-
       {/* Twitter Card Meta Tags */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:site" content={isBikatr7 ? "@Bikatr7" : "@KadenBilyeu"} />
-      <meta name="twitter:creator" content={isBikatr7 ? "@Bikatr7" : "@KadenBilyeu"} />
+      <meta name="twitter:site" content="@ktbilyeu" />
+      <meta name="twitter:creator" content="@ktbilyeu" />
       {image && (
         <>
           <meta name="twitter:image" content={image} />

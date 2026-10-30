@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -42,7 +42,7 @@ function HomeIntroduction() {
                             fontFamily="'Press Start 2P', monospace"
                             textAlign={{ base: 'center', lg: 'left' }}
                         >
-                            Yo, my name's Bikatr7. Welcome to my personal website. Feel free to click the controller icon in the top right for something more professional.
+                            Yo, my name's ktbilyeu. Welcome to my personal website. Feel free to click the controller icon in the top right for something more professional.
                             <br /><br />
                             I'm a programmer, I mostly work on various open source projects, and my current position. I also go to school full time.
                             <br /><br />
@@ -56,7 +56,7 @@ function HomeIntroduction() {
                         >
                             <Button
                                 as="a"
-                                href="https://twitter.com/bikatr7"
+                                href="https://x.com/ktbilyeu"
                                 leftIcon={<IconBrandTwitter />}
                                 rounded="none"
                                 border="2px solid"
@@ -74,7 +74,7 @@ function HomeIntroduction() {
                             </Button>
                             <Button
                                 as="a"
-                                href="mailto:bikatr7@proton.me"
+                                href="mailto:kadenbilyeu@proton.me"
                                 leftIcon={<IconMail />}
                                 rounded="none"
                                 border="2px solid"
@@ -132,7 +132,7 @@ function HomeIntroduction() {
                         </Button>
                         <Button
                             as="a"
-                            href="https://twitter.com/bikatr7"
+                            href="https://x.com/ktbilyeu"
                             leftIcon={<IconBrandTwitter />}
                             rounded="full"
                             _hover={{
@@ -145,7 +145,7 @@ function HomeIntroduction() {
                         </Button>
                         <Button
                             as="a"
-                            href="https://github.com/Bikatr7"
+                            href="https://github.com/ktbilyeu"
                             leftIcon={<IconBrandGithub />}
                             rounded="full"
                             _hover={{

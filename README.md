@@ -15,7 +15,7 @@
 ## **Introduction**<a name="introduction"></a>
 My personal portfolio, but better this time.
 
-It replaced bikatr7.github.io, with a more professional, modern, and frankly not terrible design.
+The personal portfolio and blog of Kaden Bilyeu (ktbilyeu), at https://kadenbilyeu.com.
 
 Built with React, Vite, and Typescript
 
@@ -50,6 +50,23 @@ Frontend is hosted on cloudflare pages. To deploy, push to the `production` bran
 ### Backend
 
 For production, the backend is hosted via a dockerfile.
+
+The public origin defaults use `https://kadenbilyeu.com`. If an existing deployment
+needs additional domains during a migration, configure them in its private runtime
+environment before deploying:
+
+- `CORS_ALLOWED_ORIGINS`: comma-separated exact browser origins, including the canonical origin.
+- `CORS_PREVIEW_DOMAINS`: optional comma-separated Cloudflare project domains such as `project.pages.dev`; only one preview subdomain per configured project is accepted.
+- `TERMINAL_ALLOWED_ORIGINS` and `DATABASE_RESTORE_ALLOWED_ORIGINS`: exact origins permitted to perform these authenticated admin operations.
+- `WEBAUTHN_ALLOWED_ORIGINS`: exact production origins accepted for existing passkeys. The relying-party ID remains `kadenbilyeu.com`.
+
+Do not commit a deployment's private environment file. `backend/runtime.env` is
+ignored by Git. Origin lists replace defaults; an explicitly empty list permits no origins.
+
+The sitemap uses the saved public `/site-settings` response. It lists only the home
+page while minimal mode is enabled or settings are unavailable, and never recovers
+hidden blog links from a previous sitemap. `SITEMAP_SETTINGS_API` and `SITEMAP_API`
+can point to a test backend when building locally. A build does not change the saved setting.
 
 #### To test the dockerfile locally
 1. docker build -t kadenbilyeu.com -f build.dockerfile .

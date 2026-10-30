@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -11,7 +11,7 @@ import { Button, Flex, Heading, Image, Stack, Text, Box } from '@chakra-ui/react
 import { IconBrandGithub } from '@tabler/icons-react';
 
 import face from '../../assets/images/personals/kadenbilyeu.webp';
-import bikatr7Logo from '../../assets/images/personals/bikatr7_logo.webp';
+import logo from '../../assets/images/personals/kb.webp';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useSiteSettings } from '../../contexts/SiteSettingsContext';
 
@@ -49,7 +49,7 @@ function Preface({ showContent, toggleContent }: { showContent: boolean, toggleC
                             fontFamily={isRetro ? "'Press Start 2P', monospace" : "inherit"}
                             color={isRetro ? "purple.200" : "white"}
                         >
-                            {isRetro ? "Bikatr7" : "Kaden Bilyeu"}
+                            {isRetro ? "ktbilyeu" : "Kaden Bilyeu"}
                         </Text>
                         <br />
                     </Heading>
@@ -128,7 +128,7 @@ function Preface({ showContent, toggleContent }: { showContent: boolean, toggleC
                         )}
                         <Button
                             as="a"
-                            href="https://github.com/Bikatr7"
+                            href="https://github.com/ktbilyeu"
                             leftIcon={<IconBrandGithub />}
                             rounded={isRetro ? "none" : "full"}
                             border={isRetro ? "2px solid" : "none"}
@@ -176,9 +176,9 @@ function Preface({ showContent, toggleContent }: { showContent: boolean, toggleC
                     <Box mb={6}>
                         <Image
                             boxSize={300}
-                            alt="Bikatr7 Logo"
+                            alt="Kaden Bilyeu Logo"
                             objectFit="cover"
-                            src={bikatr7Logo}
+                            src={logo}
                             border="2px solid"
                             borderColor="purple.400"
                         />

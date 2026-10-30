@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -55,11 +55,6 @@ const formatDate = (dateString: string) =>
     return formattedDate;
 };
 
-const isBikatr7URL = () => 
-{
-    const currentURL = window.location.href.toLowerCase();
-    return currentURL.includes('bikatr7');
-}
 const createSlug = (title: string): string =>
 {
     return title
@@ -110,4 +105,4 @@ const authenticatedFetch = async (url: string, options: RequestInit = {}): Promi
     return response;
 };
 
-export {getURL, formatDate, isBikatr7URL, createSlug, parseSlugOrId, authenticatedFetch}
+export {getURL, formatDate, createSlug, parseSlugOrId, authenticatedFetch}

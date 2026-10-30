@@ -147,7 +147,7 @@ class TestCORS:
     def test_status_subdomains_are_not_credentialed_origins(self):
         for origin in (
             "https://status.kadenbilyeu.com",
-            "https://status.bikatr7.com",
+            "https://status.example.com",
         ):
             response = client.options("/", headers={
                 "Origin": origin,

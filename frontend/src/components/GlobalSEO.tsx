@@ -1,4 +1,4 @@
-// Copyright 2024 Kaden Bilyeu (Bikatr7) (https://github.com/Bikatr7) (https://github.com/Bikatr7/kadenbilyeu.com) (https://kadenbilyeu.com)
+// Copyright 2024 Kaden Bilyeu (ktbilyeu) (https://github.com/ktbilyeu) (https://github.com/ktbilyeu/kadenbilyeu.com) (https://kadenbilyeu.com)
 // Use of this source code is governed by an GNU Affero General Public License v3.0
 // license that can be found in the LICENSE file.
 
@@ -6,14 +6,12 @@
 
 // helmet
 import { Helmet } from 'react-helmet-async';
-
-// utils
-import { isBikatr7URL } from '../utils';
+import { useSiteSettings } from '../contexts/SiteSettingsContext';
 
 const GlobalSEO: React.FC = () => {
-  const isBikatr7 = isBikatr7URL();
-  const siteName = isBikatr7 ? 'Bikatr7' : 'Kaden Bilyeu';
-  const siteUrl = isBikatr7 ? 'https://bikatr7.com' : 'https://kadenbilyeu.com';
+  const { settings, isLoading } = useSiteSettings();
+  const siteName = 'Kaden Bilyeu';
+  const siteUrl = 'https://kadenbilyeu.com';
 
   const websiteSchema = {
     '@context': 'https://schema.org',
@@ -24,13 +22,13 @@ const GlobalSEO: React.FC = () => {
     author: {
       '@type': 'Person',
       name: 'Kaden Bilyeu',
-      alternateName: 'Bikatr7',
+      alternateName: 'ktbilyeu',
       url: siteUrl,
       sameAs: [
-        'https://github.com/Bikatr7',
+        'https://github.com/ktbilyeu',
         'https://linkedin.com/in/kadenbilyeu',
         'https://kadenbilyeu.com',
-        'https://bikatr7.com'
+        'https://x.com/ktbilyeu'
       ],
       jobTitle: 'Software Engineer',
       knowsAbout: [
@@ -42,14 +40,14 @@ const GlobalSEO: React.FC = () => {
         'Web Development'
       ]
     },
-    potentialAction: {
+    ...(!isLoading && !settings.minimal_mode ? { potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
         urlTemplate: `${siteUrl}/blog?search={search_term_string}`
       },
       'query-input': 'required name=search_term_string'
-    },
+    } } : {}),
     publisher: {
       '@type': 'Person',
       name: siteName,
@@ -61,16 +59,16 @@ const GlobalSEO: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: 'Kaden Bilyeu',
-    alternateName: 'Bikatr7',
+    alternateName: 'ktbilyeu',
     url: siteUrl,
     image: `${siteUrl}/kb.webp`,
     description: 'Software Engineer specializing in Python, TypeScript, React, and Machine Learning',
     jobTitle: 'Software Engineer',
     sameAs: [
-      'https://github.com/Bikatr7',
+      'https://github.com/ktbilyeu',
       'https://linkedin.com/in/kadenbilyeu',
       'https://kadenbilyeu.com',
-      'https://bikatr7.com'
+      'https://x.com/ktbilyeu'
     ],
     knowsAbout: [
       'Python Programming',
