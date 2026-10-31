@@ -2,7 +2,9 @@
 ## Use of this source code is governed by an GNU Affero General Public License v3.0
 ## license that can be found in the LICENSE file.
 
-from fastapi import APIRouter, Request, Cookie, Depends
+import jwt
+
+from fastapi import APIRouter, Request, Cookie, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
@@ -12,6 +14,7 @@ from auth import (
     create_refresh_token,
     verify_token,
     verify_refresh_token,
+    decode_session_token,
     is_token_blacklisted
 )
 from database import get_db, func_add_token_to_blacklist
@@ -23,16 +26,7 @@ def _get_verified_expiry(token:str, secret:str, expected_type:str):
     """Verify a token while allowing logout to revoke a just-expired credential."""
     import jwt
     from datetime import datetime, timezone
-    from config import JWT_AUDIENCE, JWT_ISSUER, TOKEN_ALGORITHM
-
-    payload = jwt.decode(
-        token,
-        secret,
-        algorithms=[TOKEN_ALGORITHM],
-        audience=JWT_AUDIENCE,
-        issuer=JWT_ISSUER,
-        options={"verify_exp": False},
-    )
+    payload = decode_session_token(token, secret, verify_exp=False)
     if(payload.get("token_type") != expected_type or payload.get("sub") != ADMIN_USER):
         raise jwt.InvalidTokenError("Unexpected token claims")
 
@@ -91,16 +85,18 @@ async def logout(
     if access_token:
         try:
             exp = _get_verified_expiry(access_token, ACCESS_TOKEN_SECRET, "access")
-            func_add_token_to_blacklist(db, access_token, exp)
-        except Exception:
+        except (jwt.PyJWTError, ValueError, TypeError, OverflowError):
             pass
+        else:
+            func_add_token_to_blacklist(db, access_token, exp)
 
     if refresh_token:
         try:
             exp = _get_verified_expiry(refresh_token, REFRESH_TOKEN_SECRET, "refresh")
-            func_add_token_to_blacklist(db, refresh_token, exp)
-        except Exception:
+        except (jwt.PyJWTError, ValueError, TypeError, OverflowError):
             pass
+        else:
+            func_add_token_to_blacklist(db, refresh_token, exp)
 
     response = JSONResponse(content={"message": "Logged out successfully"})
     response.delete_cookie(
@@ -138,29 +134,20 @@ async def refresh_token(
     JSONResponse: Success message with new tokens set as HttpOnly cookies
     """
     from config import ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_MINUTES
-    from datetime import timedelta, datetime, timezone
-    import jwt
-    from config import REFRESH_TOKEN_SECRET, TOKEN_ALGORITHM
+    from datetime import timedelta
 
     if(refresh_token is None):
-        from fastapi import HTTPException, status
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No refresh token provided")
 
     if is_token_blacklisted(refresh_token):
-        from fastapi import HTTPException, status
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has been revoked")
 
     token_data = verify_refresh_token(refresh_token)
     if token_data.username != ADMIN_USER:
-        from fastapi import HTTPException, status
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
 
-    try:
-        payload = jwt.decode(refresh_token, REFRESH_TOKEN_SECRET, algorithms=[TOKEN_ALGORITHM], options={"verify_signature": False})
-        exp = datetime.fromtimestamp(payload.get('exp', 0), tz=timezone.utc)
-        func_add_token_to_blacklist(db, refresh_token, exp)
-    except Exception:
-        pass
+    if not func_add_token_to_blacklist(db, refresh_token, token_data.expires_at):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has been revoked")
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(

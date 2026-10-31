@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from pydantic import BaseModel
 
 from sqlalchemy import create_engine, Engine, Column, String, Text, DateTime, inspect, Inspector, Integer, text, LargeBinary, Boolean
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm import sessionmaker, close_all_sessions, Session
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 from sqlalchemy.dialects.postgresql import UUID as modelUUID
@@ -510,9 +510,9 @@ def func_delete_webauthn_credential(db: Session, credential_id: str) -> bool:
         return True
     return False
 
-def func_add_token_to_blacklist(db: Session, token: str, expires_at: datetime) -> None:
+def func_add_token_to_blacklist(db: Session, token: str, expires_at: datetime) -> bool:
     """
-    Add a token to the blacklist.
+    Revoke a token; return False only if it was already revoked.
 
     Args:
     db (Session): The SQLAlchemy session
@@ -523,9 +523,15 @@ def func_add_token_to_blacklist(db: Session, token: str, expires_at: datetime) -
         blacklisted_token = BlacklistedTokenModel(token=token, expires_at=expires_at)
         db.add(blacklisted_token)
         db.commit()
-    except Exception:
-        # Token might already be blacklisted, ignore
+        return True
+    except IntegrityError:
         db.rollback()
+        if db.query(BlacklistedTokenModel).filter(BlacklistedTokenModel.token == token).first() is not None:
+            return False
+        raise
+    except Exception:
+        db.rollback()
+        raise
 
 def func_is_token_blacklisted(db: Session, token: str) -> bool:
     """

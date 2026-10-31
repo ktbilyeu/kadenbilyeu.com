@@ -10,16 +10,16 @@ ARG APP_GID=10001
 
 WORKDIR /app
 
-# 1) Install Python deps
-COPY backend/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# 2) OS deps
+# 1) OS deps, including the current public CA trust store
 RUN apt-get update \
- && apt-get install -y --no-install-recommends gnupg2 openssh-client \
+ && apt-get install -y --no-install-recommends ca-certificates gnupg2 openssh-client \
  && rm -rf /var/lib/apt/lists/* \
  && groupadd --gid "${APP_GID}" app \
  && useradd --uid "${APP_UID}" --gid "${APP_GID}" --home-dir /app --no-create-home --shell /usr/sbin/nologin app
+
+# 2) Install Python deps after refreshing the CA trust store
+COPY backend/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # 3) Copy ALL backend code into /app (not just main.py)
 COPY --chown=app:app backend/ ./

@@ -3,6 +3,10 @@
 ## license that can be found in the LICENSE file.
 
 import typing
+import base64
+import binascii
+import re
+from uuid import uuid4
 from datetime import datetime, timedelta, timezone
 
 from fastapi import HTTPException, status, Cookie, Depends
@@ -23,6 +27,38 @@ from maintenance import (
     database_activity_window,
     is_maintenance_active,
 )
+
+
+def decode_session_token(token: str, secret: str, *, verify_exp: bool = True) -> dict:
+    """Verify our canonical compact JWTs, including during logout.
+
+    Revocation stores the issued token text. Allowing alternate Base64 spellings
+    would give the same signed credential a different revocation lookup key.
+    PyJWT accepts trailing padding for interoperability; our own issuer never
+    produces padding, so require one representation for every segment here.
+    """
+    if not isinstance(token, str):
+        raise jwt.InvalidTokenError("Invalid token encoding")
+    segments = token.split(".")
+    if len(segments) != 3:
+        raise jwt.InvalidTokenError("Invalid token encoding")
+    for segment in segments:
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", segment):
+            raise jwt.InvalidTokenError("Invalid token encoding")
+        try:
+            decoded = base64.urlsafe_b64decode(segment + "=" * (-len(segment) % 4))
+        except (ValueError, binascii.Error) as exc:
+            raise jwt.InvalidTokenError("Invalid token encoding") from exc
+        if base64.urlsafe_b64encode(decoded).rstrip(b"=").decode("ascii") != segment:
+            raise jwt.InvalidTokenError("Invalid token encoding")
+    return jwt.decode(
+        token,
+        secret,
+        algorithms=[TOKEN_ALGORITHM],
+        audience=JWT_AUDIENCE,
+        issuer=JWT_ISSUER,
+        options={"verify_exp": verify_exp},
+    )
 
 def is_token_blacklisted(token: str) -> bool:
     """
@@ -111,6 +147,7 @@ def create_access_token(data:dict, expires_delta:typing.Optional[timedelta] = No
         "iat": issued_at,
         "iss": JWT_ISSUER,
         "aud": JWT_AUDIENCE,
+        "jti": str(uuid4()),
         "token_type": "access"
     })
     encoded_jwt = jwt.encode(to_encode, ACCESS_TOKEN_SECRET, algorithm=TOKEN_ALGORITHM) # type: ignore
@@ -141,6 +178,7 @@ def create_refresh_token(data:dict, expires_delta:typing.Optional[timedelta] = N
         "iat": issued_at,
         "iss": JWT_ISSUER,
         "aud": JWT_AUDIENCE,
+        "jti": str(uuid4()),
         "token_type": "refresh"
     })
     encoded_jwt = jwt.encode(to_encode, REFRESH_TOKEN_SECRET, algorithm=TOKEN_ALGORITHM) # type: ignore
@@ -158,13 +196,7 @@ def _decode_token(token:str, secret:str, expected_type:str) -> TokenData:
     """
 
     try:
-        payload = jwt.decode(
-            token,
-            secret,
-            algorithms=[TOKEN_ALGORITHM],
-            audience=JWT_AUDIENCE,
-            issuer=JWT_ISSUER
-        ) # type: ignore
+        payload = decode_session_token(token, secret)
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired")
     except PyJWTError:
